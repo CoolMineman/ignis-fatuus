@@ -1,0 +1,14 @@
+{
+    "parent": "block/cube_column",
+    "display": {
+        "firstperson_righthand": {
+            "rotation": [ 0, 135, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.40, 0.40, 0.40 ]
+        }
+    },
+    "textures": {
+        "end": "ignis-fatuus:block/pumpkin_top_break_2",
+        "side": "block/pumpkin_side"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "knifed=1": { "model": "ignis-fatuus:block/knifed_pumpkin_block_1" },
+        "knifed=2": { "model": "ignis-fatuus:block/knifed_pumpkin_block_2" },
+        "knifed=3": { "model": "ignis-fatuus:block/knifed_pumpkin_block_3" }
+    }
+}
