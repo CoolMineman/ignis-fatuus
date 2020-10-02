@@ -13,6 +13,23 @@ repositories {
 	maven {
 		url = 'https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/'
 	}
+
+	//Begin Canvas
+	// where grondag's mods live
+    maven {
+    	name = "dblsaiko"
+    	url = "https://maven.dblsaiko.net/"
+    }
+    maven {
+      name = "Cotton"
+      url = "http://server.bbkr.space:8081/artifactory/libs-release/"
+    }
+    // REI, odds and ends
+    maven {
+      name = "CurseForge"
+      url = "https://minecraft.curseforge.com/api/maven"
+    }
+	//End Canvas
 }
 
 dependencies {
@@ -26,6 +43,7 @@ dependencies {
 
 	modImplementation group: 'net.devtech', name: 'arrp', version: '0.2.6'
 	include group: 'net.devtech', name: 'arrp', version: '0.2.6'
+	modCompile "grondag:canvas-mc116:1.0.+"
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.

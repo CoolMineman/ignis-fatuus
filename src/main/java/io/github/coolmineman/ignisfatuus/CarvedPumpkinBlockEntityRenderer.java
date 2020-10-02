@@ -4,7 +4,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.util.ModelIdentifier;
@@ -20,7 +19,7 @@ public class CarvedPumpkinBlockEntityRenderer extends BlockEntityRenderer<Carved
     public void render(CarvedPumpkinBlockEntity entity, float tickDelta, MatrixStack matrices,
             VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrices.push();
-        drawBlockModel(matrices, vertexConsumers, WorldRenderer.getLightmapCoordinates(entity.getWorld(), entity.getPos()), IgnisfatuusClient.PUMPKIN_MODEL_PARTS2[0][0]);
+        drawBlockModel(matrices, vertexConsumers, light, IgnisfatuusClient.PUMPKIN_MODEL_PARTS2[0][0]);
         matrices.pop();
     }
 
@@ -30,7 +29,7 @@ public class CarvedPumpkinBlockEntityRenderer extends BlockEntityRenderer<Carved
                 vcp.getBuffer(RenderLayer.getSolid()),
                 null,
                 MinecraftClient.getInstance().getBakedModelManager().getModel(id),
-                1f, 1f, 1f,
+                1.0f, 1.0f, 1.0f,
                 Math.max(light - 3, 0),
                 OverlayTexture.DEFAULT_UV
         );
