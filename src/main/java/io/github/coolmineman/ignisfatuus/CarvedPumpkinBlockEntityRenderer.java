@@ -1,5 +1,8 @@
 package io.github.coolmineman.ignisfatuus;
 
+import java.util.Random;
+
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -10,6 +13,7 @@ import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class CarvedPumpkinBlockEntityRenderer extends BlockEntityRenderer<CarvedPumpkinBlockEntity> {
+    static Random dumb_Random = new Random();
 
     public CarvedPumpkinBlockEntityRenderer(BlockEntityRenderDispatcher dispatcher) {
         super(dispatcher);
@@ -19,20 +23,12 @@ public class CarvedPumpkinBlockEntityRenderer extends BlockEntityRenderer<Carved
     public void render(CarvedPumpkinBlockEntity entity, float tickDelta, MatrixStack matrices,
             VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrices.push();
-        drawBlockModel(matrices, vertexConsumers, light, IgnisfatuusClient.PUMPKIN_MODEL_PARTS2[0][0]);
+        drawBlockModelSmooth(entity, matrices, vertexConsumers, IgnisfatuusClient.PUMPKIN_MODEL_PARTS2[11][11]);
         matrices.pop();
     }
-
-    public static void drawBlockModel(MatrixStack matrices, VertexConsumerProvider vcp, int light, ModelIdentifier id) {
-        MinecraftClient.getInstance().getBlockRenderManager().getModelRenderer().render(
-                matrices.peek(),
-                vcp.getBuffer(RenderLayer.getSolid()),
-                null,
-                MinecraftClient.getInstance().getBakedModelManager().getModel(id),
-                1.0f, 1.0f, 1.0f,
-                Math.max(light - 3, 0),
-                OverlayTexture.DEFAULT_UV
-        );
+    
+    public static void drawBlockModelSmooth(BlockEntity entity, MatrixStack matrices, VertexConsumerProvider vcp, ModelIdentifier id) {
+        MinecraftClient.getInstance().getBlockRenderManager().getModelRenderer().renderSmooth(entity.getWorld(), MinecraftClient.getInstance().getBakedModelManager().getModel(id), entity.getCachedState(), entity.getPos(), matrices, vcp.getBuffer(RenderLayer.getTranslucent()), true, dumb_Random, 1L, OverlayTexture.DEFAULT_UV);
     }
     
 }
