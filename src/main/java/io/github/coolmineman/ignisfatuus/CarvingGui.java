@@ -16,12 +16,13 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 
 public class CarvingGui extends LightweightGuiDescription {
-    final boolean[][] carved_area = new boolean[12][12];
+    final boolean[][] carved_area;
     final CarvedPumpkinBlockEntity entity;
     CarvingScreen parent;
 
     public CarvingGui(CarvedPumpkinBlockEntity entity) {
         this.entity = entity;
+        carved_area = entity.getCarved_area();
         WGridPanel root = new WGridPanel();
         setRootPanel(root);
         WSprite background = new WSprite(new Identifier("minecraft:textures/block/pumpkin_side.png"));
@@ -72,6 +73,11 @@ public class CarvingGui extends LightweightGuiDescription {
             if (!yes.carved_area[knapx][knapy]) {
                 MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 this.yes.carved_area[knapx][knapy] = true;
+                PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+                passedData.writeBlockPos(yes.entity.getPos());
+                passedData.writeInt(knapx);
+                passedData.writeInt(knapy);
+                ClientSidePacketRegistry.INSTANCE.sendToServer(Ignisfatuus.CARVE_PACKET_ID, passedData);
             }
         }
     }
