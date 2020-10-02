@@ -3,6 +3,7 @@ package io.github.coolmineman.ignisfatuus;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
@@ -26,6 +27,9 @@ public class KnifeItem extends Item {
             int progress = state.get(KnifedPumpkinBlock.knifed);
             if (progress < 3) {
                 world.setBlockState(pos, state.with(KnifedPumpkinBlock.knifed, progress + 1));
+            } else {
+                world.setBlockState(pos, Ignisfatuus.carved_pumpkin_block.getPlacementState(new ItemPlacementContext(context)));
+                //world.setBlockEntity(pos, Ignisfatuus.carved_pumpkin_block.createBlockEntity(world));
             }
         } else {
             return ActionResult.PASS;

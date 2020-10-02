@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "io.github.coolmineman.ignisfatuus.Ignisfatuus"
+    ],
+    "client": [
+      "io.github.coolmineman.ignisfatuus.IgnisfatuusClient"
     ]
   },
   "mixins": [

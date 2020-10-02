@@ -1,10 +1,10 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "Downloads/pumpkin_top",
-		"1": "Downloads/pumpkin_side",
-		"2": "epicfolder/pumpkin_insides",
-		"particle": "Downloads/pumpkin_top"
+		"0": "block/pumpkin_top",
+		"1": "block/pumpkin_side",
+		"2": "ignis-fatuus:block/pumpkin_insides",
+		"particle": "block/pumpkin_top"
 	},
 	"elements": [
 		{

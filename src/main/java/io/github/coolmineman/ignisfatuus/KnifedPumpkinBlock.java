@@ -2,11 +2,10 @@ package io.github.coolmineman.ignisfatuus;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.PumpkinBlock;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.IntProperty;
 
-public class KnifedPumpkinBlock extends PumpkinBlock {
+public class KnifedPumpkinBlock extends Block {
     public static final IntProperty knifed = IntProperty.of("knifed", 1, 3);
 
     protected KnifedPumpkinBlock(Settings settings) {
