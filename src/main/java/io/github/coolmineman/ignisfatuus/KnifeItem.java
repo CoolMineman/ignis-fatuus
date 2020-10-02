@@ -2,6 +2,7 @@ package io.github.coolmineman.ignisfatuus;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemUsageContext;
@@ -29,7 +30,10 @@ public class KnifeItem extends Item {
                 world.setBlockState(pos, state.with(KnifedPumpkinBlock.knifed, progress + 1));
             } else {
                 world.setBlockState(pos, Ignisfatuus.carved_pumpkin_block.getPlacementState(new ItemPlacementContext(context)));
-                //world.setBlockEntity(pos, Ignisfatuus.carved_pumpkin_block.createBlockEntity(world));
+            }
+        } else if (state.isOf(Ignisfatuus.carved_pumpkin_block)) {
+            if (world.isClient && world.getBlockEntity(pos) instanceof CarvedPumpkinBlockEntity) {
+                MinecraftClient.getInstance().openScreen(new CarvingScreen(new CarvingGui((CarvedPumpkinBlockEntity) world.getBlockEntity(pos))));
             }
         } else {
             return ActionResult.PASS;
