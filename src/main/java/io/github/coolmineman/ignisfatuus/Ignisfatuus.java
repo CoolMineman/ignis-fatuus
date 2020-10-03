@@ -24,7 +24,9 @@ public class Ignisfatuus implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 		knifed_pumpkin_block = Registry.register(Registry.BLOCK, new Identifier("ignis-fatuus", "knifed_pumpkin_block"), new KnifedPumpkinBlock(FabricBlockSettings.copyOf(Blocks.PUMPKIN)));
-		carved_pumpkin_block = Registry.register(Registry.BLOCK, new Identifier("ignis-fatuus", "carved_pumpkin_block"), new CarvedPumpkinBlock(FabricBlockSettings.copyOf(Blocks.PUMPKIN).nonOpaque()));
+		carved_pumpkin_block = Registry.register(Registry.BLOCK, new Identifier("ignis-fatuus", "carved_pumpkin_block"), new CarvedPumpkinBlock(FabricBlockSettings.copyOf(Blocks.PUMPKIN).nonOpaque().luminance(bs -> {
+			return bs.get(CarvedPumpkinBlock.torch) ? 5 : 0;
+		})));
 		knifed_pumpkin_block_entity = Registry.register(Registry.BLOCK_ENTITY_TYPE, "ignis-fatuus:carved_pumpkin_block_entity", BlockEntityType.Builder.create(CarvedPumpkinBlockEntity::new, carved_pumpkin_block).build(null));
 		knife_item = Registry.register(Registry.ITEM, new Identifier("ignis-fatuus", "knife"), new KnifeItem(new FabricItemSettings()));
 

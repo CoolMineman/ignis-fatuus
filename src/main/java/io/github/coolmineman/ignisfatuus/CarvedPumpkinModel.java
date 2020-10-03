@@ -10,6 +10,10 @@ import java.util.function.Supplier;
 
 import com.mojang.datafixers.util.Pair;
 
+import grondag.canvas.apiimpl.Canvas;
+import grondag.canvas.render.CanvasWorldRenderer;
+import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
+import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext.QuadTransform;
@@ -25,17 +29,20 @@ import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Matrix3f;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.world.BlockRenderView;
 
 public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBakedModel {
     // QuadTransform transform;
+    RenderMaterial canvasmaterial;
 
     @Override
     public Collection<Identifier> getModelDependencies() {
@@ -51,27 +58,15 @@ public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBaked
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter,
             ModelBakeSettings rotationContainer, Identifier modelId) {
-        // Quaternion rotate = rotationContainer.getRotation().getRotation2();
-        // transform = (mv) -> {
-        //     Vector3f tmp = new Vector3f();
-
-        //     for (int i = 0; i < 4; i++) {
-        //         // Transform the position (center of rotation is 0.5, 0.5, 0.5)
-        //         mv.copyPos(i, tmp);
-        //         tmp.add(-0.5f, -0.5f, -0.5f);
-        //         tmp.rotate(rotate);
-        //         tmp.add(0.5f, 0.5f, 0.5f);
-        //         mv.pos(i, tmp);
-
-        //         // Transform the normal
-        //         if (mv.hasNormal(i)) {
-        //             mv.copyNormal(i, tmp);
-        //             tmp.rotate(rotate);
-        //             mv.normal(i, tmp);
-        //         }
-        //     }
-        //     return true;
-        // };
+        boolean canvas = RendererAccess.INSTANCE.getRenderer() instanceof Canvas;
+        if (canvas) {
+            Canvas canvas_instance = (Canvas) RendererAccess.INSTANCE.getRenderer();
+            canvasmaterial = canvas_instance.materialFinder().shader(0, canvas_instance.shaderBuilder()
+                .vertexSource(new Identifier("canvas:shaders/material/default.vert"))
+                .fragmentSource(new Identifier("ignis-fatuus:shaders/material/ultra_warm_glow.frag"))
+                .build()
+            ).find();
+        }
         return this;
     }
 
@@ -183,6 +178,30 @@ public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBaked
                 }
             }
         }
+        context.popTransform();
+
+        boolean canvas = RendererAccess.INSTANCE.getRenderer() instanceof Canvas;
+
+        if (canvas) {
+            context.pushTransform(mv -> {
+                mv.material(canvasmaterial);
+                return true;
+            });
+        }
+        context.pushTransform(mv -> {
+            Vector3f tmp = new Vector3f();
+            for (int i = 0; i < 4; i++) {
+                mv.copyPos(i, tmp);
+                tmp.add(-0.5f, -0.5f, -0.5f);
+                tmp.transform(Matrix3f.scale(0.5f, 0.5f, 0.5f));
+                tmp.add(0.5f, 0.5f, 0.5f);
+                tmp.add(0, (1f / 16f) - 0.25f, 0);
+                mv.pos(i, tmp);
+            }
+            return true;
+        });
+        context.fallbackConsumer().accept(MinecraftClient.getInstance().getBakedModelManager().getModel(new ModelIdentifier(new Identifier("minecraft", "torch"), "")));
+        if (canvas) context.popTransform();
         context.popTransform();
     }
 

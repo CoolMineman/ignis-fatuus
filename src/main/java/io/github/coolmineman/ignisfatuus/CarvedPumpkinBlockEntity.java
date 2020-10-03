@@ -56,11 +56,6 @@ public class CarvedPumpkinBlockEntity extends BlockEntity implements BlockEntity
     @Override
     public void fromClientTag(CompoundTag tag) {
         fromTag(null, tag);
-        for (int i = 0; i <= 11; i++) {
-            for (int j = 0; j <= 11; j++) {
-                System.out.println(carved_area[i][j]);
-            }
-        }
         MinecraftClient.getInstance().worldRenderer.scheduleBlockRenders(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY(), pos.getZ());
     }
 

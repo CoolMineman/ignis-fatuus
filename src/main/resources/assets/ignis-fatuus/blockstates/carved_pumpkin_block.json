@@ -10,14 +10,6 @@
         },
         {
             "when": {
-                "torch": "true"
-            },
-            "apply": {
-                "model": "ignis-fatuus:block/pumpkin_torch"
-            }
-        },
-        {
-            "when": {
                 "facing": "north"
             },
             "apply": {

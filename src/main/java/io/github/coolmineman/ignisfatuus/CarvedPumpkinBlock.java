@@ -62,4 +62,5 @@ public class CarvedPumpkinBlock extends HorizontalFacingBlock implements BlockEn
     public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) {
         return true;
     }
+
 }
