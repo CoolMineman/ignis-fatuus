@@ -78,7 +78,7 @@ public class IgnisfatuusClient implements ClientModInitializer {
             }
         });
 
-        BlockEntityRendererRegistry.INSTANCE.register(Ignisfatuus.knifed_pumpkin_block_entity, CarvedPumpkinBlockEntityRenderer::new);
+        ModelLoadingRegistry.INSTANCE.registerResourceProvider(rm -> new CarvedModelProvider());
         BlockRenderLayerMap.INSTANCE.putBlock(Ignisfatuus.carved_pumpkin_block, RenderLayer.getCutout());
     }
     

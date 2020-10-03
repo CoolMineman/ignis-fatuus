@@ -50,6 +50,42 @@
                 "model": "ignis-fatuus:block/carved_pumpkin_base",
                 "y": 270
             }
+        },
+        {
+            "when": {
+                "facing": "north"
+            },
+            "apply": {
+                "model": "ignis-fatuus:block/pumpkin_dynamic",
+                "y": 90
+            }
+        },
+        {
+            "when": {
+                "facing": "east"
+            },
+            "apply": {
+                "model": "ignis-fatuus:block/pumpkin_dynamic",
+                "y": 90
+            }
+        },
+        {
+            "when": {
+                "facing": "south"
+            },
+            "apply": {
+                "model": "ignis-fatuus:block/pumpkin_dynamic",
+                "y": 180
+            }
+        },
+        {
+            "when": {
+                "facing": "west"
+            },
+            "apply": {
+                "model": "ignis-fatuus:block/pumpkin_dynamic",
+                "y": 270
+            }
         }
     ]
 }

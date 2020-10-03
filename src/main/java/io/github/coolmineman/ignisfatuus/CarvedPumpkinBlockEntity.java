@@ -3,6 +3,7 @@ package io.github.coolmineman.ignisfatuus;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -60,6 +61,7 @@ public class CarvedPumpkinBlockEntity extends BlockEntity implements BlockEntity
                 System.out.println(carved_area[i][j]);
             }
         }
+        MinecraftClient.getInstance().worldRenderer.scheduleBlockRenders(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override
