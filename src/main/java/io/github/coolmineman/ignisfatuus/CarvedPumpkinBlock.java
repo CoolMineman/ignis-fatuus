@@ -39,7 +39,12 @@ public class CarvedPumpkinBlock extends HorizontalFacingBlock implements BlockEn
             BlockHitResult hit) {
         if (player.getStackInHand(hand).getItem().equals(Items.TORCH) && state.get(torch).equals(false)) {
             world.setBlockState(pos, state.with(torch, true));
-            player.getStackInHand(hand).decrement(1);
+            if (!player.isCreative()) player.getStackInHand(hand).decrement(1);
+            return ActionResult.SUCCESS;
+        }
+        if (player.getStackInHand(hand).getItem().equals(Items.PUMPKIN_SEEDS) && state.get(lid).equals(false)) {
+            world.setBlockState(pos, state.with(lid, true));
+            if (!player.isCreative()) player.getStackInHand(hand).decrement(1);
             return ActionResult.SUCCESS;
         }
         return super.onUse(state, world, pos, player, hand, hit);

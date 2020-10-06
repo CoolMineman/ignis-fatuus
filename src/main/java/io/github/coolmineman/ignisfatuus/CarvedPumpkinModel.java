@@ -41,7 +41,6 @@ import net.minecraft.util.math.Quaternion;
 import net.minecraft.world.BlockRenderView;
 
 public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBakedModel {
-    // QuadTransform transform;
     RenderMaterial canvasmaterial;
 
     @Override
@@ -159,12 +158,7 @@ public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBaked
                     mv.normal(i, tmp);
                 }
             }
-            Direction nominalFace = mv.nominalFace();
-            Direction cullFace = mv.cullFace();
-            
-            if (cullFace != null) {
-                // mv.cullFace(rotation.rotate(cullFace));
-            }
+
             mv.nominalFace(state.get(HorizontalFacingBlock.FACING));
             return true;
         };
@@ -182,33 +176,35 @@ public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBaked
 
         boolean canvas = RendererAccess.INSTANCE.getRenderer() instanceof Canvas;
 
-        if (canvas) {
+        if (Boolean.TRUE.equals(state.get(CarvedPumpkinBlock.torch))) {
+            if (canvas) {
+                context.pushTransform(mv -> {
+                    mv.material(canvasmaterial);
+                    return true;
+                });
+            }
             context.pushTransform(mv -> {
-                mv.material(canvasmaterial);
+                Vector3f tmp = new Vector3f();
+                for (int i = 0; i < 4; i++) {
+                    mv.copyPos(i, tmp);
+                    tmp.add(-0.5f, -0.5f, -0.5f);
+                    tmp.transform(Matrix3f.scale(0.5f, 0.5f, 0.5f));
+                    tmp.add(0.5f, 0.5f, 0.5f);
+                    tmp.add(0, (1f / 16f) - 0.25f, 0);
+                    mv.pos(i, tmp);
+                }
                 return true;
             });
+            context.fallbackConsumer().accept(MinecraftClient.getInstance().getBakedModelManager().getModel(new ModelIdentifier(new Identifier("minecraft", "torch"), "")));
+            if (canvas) context.popTransform();
+            context.popTransform();
         }
-        context.pushTransform(mv -> {
-            Vector3f tmp = new Vector3f();
-            for (int i = 0; i < 4; i++) {
-                mv.copyPos(i, tmp);
-                tmp.add(-0.5f, -0.5f, -0.5f);
-                tmp.transform(Matrix3f.scale(0.5f, 0.5f, 0.5f));
-                tmp.add(0.5f, 0.5f, 0.5f);
-                tmp.add(0, (1f / 16f) - 0.25f, 0);
-                mv.pos(i, tmp);
-            }
-            return true;
-        });
-        context.fallbackConsumer().accept(MinecraftClient.getInstance().getBakedModelManager().getModel(new ModelIdentifier(new Identifier("minecraft", "torch"), "")));
-        if (canvas) context.popTransform();
-        context.popTransform();
+
     }
 
     @Override
     public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
-        // TODO Auto-generated method stub
-
+        //No Item
     }
     
 }
