@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -28,7 +29,7 @@ public class Ignisfatuus implements ModInitializer {
 			return bs.get(CarvedPumpkinBlock.torch) ? 5 : 0;
 		})));
 		knifed_pumpkin_block_entity = Registry.register(Registry.BLOCK_ENTITY_TYPE, "ignis-fatuus:carved_pumpkin_block_entity", BlockEntityType.Builder.create(CarvedPumpkinBlockEntity::new, carved_pumpkin_block).build(null));
-		knife_item = Registry.register(Registry.ITEM, new Identifier("ignis-fatuus", "knife"), new KnifeItem(new FabricItemSettings()));
+		knife_item = Registry.register(Registry.ITEM, new Identifier("ignis-fatuus", "knife"), new KnifeItem(new FabricItemSettings().group(ItemGroup.TOOLS)));
 
 		ServerSidePacketRegistry.INSTANCE.register(CARVE_PACKET_ID, (packetContext, attachedData) -> {
             // Get the BlockPos we put earlier in the IO thread

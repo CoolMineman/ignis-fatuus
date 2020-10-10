@@ -23,6 +23,7 @@ public class IgnisfatuusClient implements ClientModInitializer {
     public static final RuntimeResourcePack RESOURCE_PACK = RuntimeResourcePack.create("ignis-fatuus:runtime_resources");
     private static final Identifier[][] PUMPKIN_MODEL_PARTS = new Identifier[12][12];
     public static final ModelIdentifier[][] PUMPKIN_MODEL_PARTS2 = new ModelIdentifier[12][12];
+    public static final ModelIdentifier PUMPKIN_GLOW = new ModelIdentifier(new Identifier("ignis-fatuus", "pumpkin_glow"), "");
 
     static {
         for (int i = 0; i <= 11; i++) {
@@ -75,6 +76,7 @@ public class IgnisfatuusClient implements ClientModInitializer {
                     b.accept(PUMPKIN_MODEL_PARTS2[i][j]);
                 }
             }
+            b.accept(PUMPKIN_GLOW);
         });
 
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(rm -> new CarvedModelProvider());

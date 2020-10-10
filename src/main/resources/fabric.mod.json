@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Ignis Fatuus",
-  "description": "Spooky Mod For Spooky People",
+  "description": "Carve All The Pumpkins",
   "authors": [
     "ThatTrollzer/cool_mineman"
   ],
@@ -25,9 +25,6 @@
       "io.github.coolmineman.ignisfatuus.IgnisfatuusClient"
     ]
   },
-  "mixins": [
-    "ignis-fatuus.mixins.json"
-  ],
 
   "depends": {
     "fabricloader": ">=0.7.4",

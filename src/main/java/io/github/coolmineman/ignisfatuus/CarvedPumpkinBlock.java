@@ -68,4 +68,8 @@ public class CarvedPumpkinBlock extends HorizontalFacingBlock implements BlockEn
         return true;
     }
 
+    @Override
+    public String getTranslationKey() {
+        return "block.minecraft.carved_pumpkin";
+    }
 }

@@ -75,8 +75,7 @@
                 "facing": "west"
             },
             "apply": {
-                "model": "ignis-fatuus:block/pumpkin_dynamic",
-                "y": 270
+                "model": "ignis-fatuus:block/pumpkin_dynamic"
             }
         }
     ]

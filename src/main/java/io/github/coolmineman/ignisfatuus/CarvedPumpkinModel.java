@@ -11,7 +11,6 @@ import java.util.function.Supplier;
 import com.mojang.datafixers.util.Pair;
 
 import grondag.canvas.apiimpl.Canvas;
-import grondag.canvas.render.CanvasWorldRenderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
@@ -57,7 +56,7 @@ public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBaked
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter,
             ModelBakeSettings rotationContainer, Identifier modelId) {
-        boolean canvas = RendererAccess.INSTANCE.getRenderer() instanceof Canvas;
+        boolean canvas = RendererAccess.INSTANCE.getRenderer().getClass().getName().equals("grondag.canvas.apiimpl.Canvas");
         if (canvas) {
             Canvas canvas_instance = (Canvas) RendererAccess.INSTANCE.getRenderer();
             canvasmaterial = canvas_instance.materialFinder().shader(0, canvas_instance.shaderBuilder()
@@ -174,31 +173,35 @@ public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBaked
         }
         context.popTransform();
 
-        boolean canvas = RendererAccess.INSTANCE.getRenderer() instanceof Canvas;
-
-        if (Boolean.TRUE.equals(state.get(CarvedPumpkinBlock.torch))) {
-            if (canvas) {
-                context.pushTransform(mv -> {
-                    mv.material(canvasmaterial);
-                    return true;
-                });
-            }
+        boolean canvas = RendererAccess.INSTANCE.getRenderer().getClass().getName().equals("grondag.canvas.apiimpl.Canvas");
+        if (canvas) {
             context.pushTransform(mv -> {
-                Vector3f tmp = new Vector3f();
-                for (int i = 0; i < 4; i++) {
-                    mv.copyPos(i, tmp);
-                    tmp.add(-0.5f, -0.5f, -0.5f);
-                    tmp.transform(Matrix3f.scale(0.5f, 0.5f, 0.5f));
-                    tmp.add(0.5f, 0.5f, 0.5f);
-                    tmp.add(0, (1f / 16f) - 0.25f, 0);
-                    mv.pos(i, tmp);
-                }
+                mv.material(canvasmaterial);
                 return true;
             });
-            context.fallbackConsumer().accept(MinecraftClient.getInstance().getBakedModelManager().getModel(new ModelIdentifier(new Identifier("minecraft", "torch"), "")));
-            if (canvas) context.popTransform();
-            context.popTransform();
         }
+        context.pushTransform(mv -> {
+            Vector3f tmp = new Vector3f();
+            for (int i = 0; i < 4; i++) {
+                mv.copyPos(i, tmp);
+                tmp.add(-0.5f, -0.5f, -0.5f);
+                tmp.transform(Matrix3f.scale(0.5f, 0.5f, 0.5f));
+                tmp.add(0.5f, 0.5f, 0.5f);
+                tmp.add(0, (1f / 16f) - 0.25f, 0);
+                mv.pos(i, tmp);
+            }
+            return true;
+        });
+        if (Boolean.TRUE.equals(state.get(CarvedPumpkinBlock.torch))) {
+            context.fallbackConsumer().accept(MinecraftClient.getInstance().getBakedModelManager().getModel(new ModelIdentifier(new Identifier("minecraft", "torch"), "")));
+        }
+        context.popTransform();
+        context.pushTransform(transform);
+        if (Boolean.TRUE.equals(state.get(CarvedPumpkinBlock.lid)) && Boolean.TRUE.equals(state.get(CarvedPumpkinBlock.torch))) {
+            context.fallbackConsumer().accept(MinecraftClient.getInstance().getBakedModelManager().getModel(IgnisfatuusClient.PUMPKIN_GLOW));
+        }
+        context.popTransform();
+        if (canvas) context.popTransform();
 
     }
 

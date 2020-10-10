@@ -19,4 +19,9 @@ public class KnifedPumpkinBlock extends Block {
         builder.add(knifed);
     }
 
+    @Override
+    public String getTranslationKey() {
+        return "block.minecraft.pumpkin";
+    }
+
 }
