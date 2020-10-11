@@ -197,7 +197,7 @@ public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBaked
         }
         context.popTransform();
         context.pushTransform(transform);
-        if (Boolean.TRUE.equals(state.get(CarvedPumpkinBlock.lid)) && Boolean.TRUE.equals(state.get(CarvedPumpkinBlock.torch))) {
+        if (canvas && Boolean.TRUE.equals(state.get(CarvedPumpkinBlock.lid)) && Boolean.TRUE.equals(state.get(CarvedPumpkinBlock.torch))) {
             context.fallbackConsumer().accept(MinecraftClient.getInstance().getBakedModelManager().getModel(IgnisfatuusClient.PUMPKIN_GLOW));
         }
         context.popTransform();
