@@ -37,7 +37,7 @@ public class KnifeItem extends Item {
             }
         } else if (state.isOf(Ignisfatuus.carved_pumpkin_block)) {
             if (world.isClient && world.getBlockEntity(pos) instanceof CarvedPumpkinBlockEntity) {
-                MinecraftClient.getInstance().openScreen(new CarvingScreen(new CarvingGui((CarvedPumpkinBlockEntity) world.getBlockEntity(pos))));
+                AHHHHHH.aHHHHHHHH(pos, world);
             }
         } else if (state.isOf(Blocks.CARVED_PUMPKIN)) {
             world.setBlockState(pos, Ignisfatuus.carved_pumpkin_block.getDefaultState().with(HorizontalFacingBlock.FACING, state.get(HorizontalFacingBlock.FACING)));
