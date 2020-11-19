@@ -59,11 +59,7 @@ public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBaked
         boolean canvas = RendererAccess.INSTANCE.getRenderer().getClass().getName().equals("grondag.canvas.apiimpl.Canvas");
         if (canvas) {
             Canvas canvas_instance = (Canvas) RendererAccess.INSTANCE.getRenderer();
-            canvasmaterial = canvas_instance.materialFinder().shader(0, canvas_instance.shaderBuilder()
-                .vertexSource(new Identifier("canvas:shaders/material/default.vert"))
-                .fragmentSource(new Identifier("ignis-fatuus:shaders/material/ultra_warm_glow.frag"))
-                .build()
-            ).find();
+            canvasmaterial = canvas_instance.materialFinder().shader(new Identifier("canvas:shaders/material/default.vert"), new Identifier("ignis-fatuus:shaders/material/ultra_warm_glow.frag")).find();
         }
         return this;
     }
