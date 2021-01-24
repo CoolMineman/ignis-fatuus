@@ -1,6 +1,9 @@
 package io.github.coolmineman.ignisfatuus;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
@@ -8,7 +11,7 @@ import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 
-public class CarvedPumpkinBlockEntity extends BlockEntity implements BlockEntityClientSerializable {
+public class CarvedPumpkinBlockEntity extends BlockEntity implements BlockEntityClientSerializable, RenderAttachmentBlockEntity {
     private boolean[][] carved_area = new boolean[12][12];
 
     public CarvedPumpkinBlockEntity() {
@@ -34,13 +37,15 @@ public class CarvedPumpkinBlockEntity extends BlockEntity implements BlockEntity
     public void fromTag(BlockState state, CompoundTag tag) {
         super.fromTag(state, tag);
         if (tag.contains("carved_area")) {
+            boolean[][] new_carved_area = new boolean[12][12];
             ListTag carvedListTag = tag.getList("carved_area", 9);
             for (int i = 0; i <= 11; i++) {
                 ListTag carvedListTagInner = carvedListTag.getList(i);
                 for (int j = 0; j <= 11; j++) {
-                    carved_area[i][j] = ((ByteTag)carvedListTagInner.get(j)).getByte() == 1;
+                    new_carved_area[i][j] = ((ByteTag)carvedListTagInner.get(j)).getByte() == 1;
                 }
             }
+            carved_area = new_carved_area;
         }
     }
 
@@ -63,4 +68,9 @@ public class CarvedPumpkinBlockEntity extends BlockEntity implements BlockEntity
     public CompoundTag toClientTag(CompoundTag tag) {
         return toTag(tag);
     }
+
+	@Override
+	public @Nullable Object getRenderAttachmentData() {
+		return getCarved_area();
+	}
 }

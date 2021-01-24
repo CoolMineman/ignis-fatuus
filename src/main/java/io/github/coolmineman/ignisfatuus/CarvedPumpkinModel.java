@@ -16,6 +16,7 @@ import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext.QuadTransform;
+import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachedBlockView;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -158,10 +159,12 @@ public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBaked
             return true;
         };
         context.pushTransform(transform);
-        if (entity instanceof CarvedPumpkinBlockEntity) {
+        Object carvedAreaObject = ((RenderAttachedBlockView) blockView).getBlockEntityRenderAttachment(pos);
+        if (carvedAreaObject instanceof boolean[][]) {
+            boolean[][] carvedArea = (boolean[][]) carvedAreaObject;
             for (int i = 0; i <= 11; i++) {
                 for (int j = 0; j <= 11; j++) {
-                    if (!((CarvedPumpkinBlockEntity)entity).getCarved_area()[i][j]) {
+                    if (!carvedArea[i][j]) {
                         context.fallbackConsumer().accept(MinecraftClient.getInstance().getBakedModelManager().getModel(IgnisfatuusClient.PUMPKIN_MODEL_PARTS2[i][j]));
                     }
                 }
