@@ -4,6 +4,7 @@ import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.WButton;
 import io.github.cottonmc.cotton.gui.widget.WGridPanel;
 import io.github.cottonmc.cotton.gui.widget.WSprite;
+import io.github.cottonmc.cotton.gui.widget.data.InputResult;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -56,7 +57,7 @@ public class CarvingGui extends LightweightGuiDescription {
     
         @Environment(EnvType.CLIENT)
         @Override
-        public void onMouseMove(int x, int y) {
+        public InputResult onMouseMove(int x, int y) {
             if (this.yes.parent.mouseDown && !yes.carved_area[knapx][knapy]) {
                 MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 this.yes.carved_area[knapx][knapy] = true;
@@ -65,11 +66,13 @@ public class CarvingGui extends LightweightGuiDescription {
                 passedData.writeInt(knapx);
                 passedData.writeInt(knapy);
                 ClientSidePacketRegistry.INSTANCE.sendToServer(Ignisfatuus.CARVE_PACKET_ID, passedData);
+                return InputResult.PROCESSED;
             }
+            return InputResult.IGNORED;
         }
     
         @Override
-        public void onClick(int x, int y, int button) {
+        public InputResult onClick(int x, int y, int button) {
             if (!yes.carved_area[knapx][knapy]) {
                 MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 this.yes.carved_area[knapx][knapy] = true;
@@ -78,7 +81,9 @@ public class CarvingGui extends LightweightGuiDescription {
                 passedData.writeInt(knapx);
                 passedData.writeInt(knapy);
                 ClientSidePacketRegistry.INSTANCE.sendToServer(Ignisfatuus.CARVE_PACKET_ID, passedData);
+                return InputResult.PROCESSED;
             }
+            return InputResult.IGNORED;
         }
     }
 }

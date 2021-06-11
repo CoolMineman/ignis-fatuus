@@ -57,10 +57,10 @@ public class CarvedPumpkinBlock extends HorizontalFacingBlock implements BlockEn
         builder.add(lid);
         builder.add(torch);
     }
-
+    
     @Override
-    public BlockEntity createBlockEntity(BlockView world) {
-        return new CarvedPumpkinBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new CarvedPumpkinBlockEntity(pos, state);
     }
 
     @Override

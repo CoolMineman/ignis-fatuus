@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.5-SNAPSHOT'
+	id 'fabric-loom' version '0.8-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -11,7 +11,7 @@ version = project.mod_version
 group = project.maven_group
 repositories {
 	maven {
-		url = 'https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/'
+		url = uri("https://storage.googleapis.com/devan-maven/")
 	}
 	// where grondag's mods live
     maven {
@@ -19,13 +19,13 @@ repositories {
     	url = "https://maven.dblsaiko.net/"
     }
     maven {
-      name = "Cotton"
-      url = "http://server.bbkr.space/artifactory/libs-release/"
+    	name = "Cotton"
+    	url = "https://server.bbkr.space/artifactory/libs-release/"
     }
     // REI, odds and ends
     maven {
-      name = "CurseForge"
-      url = "https://minecraft.curseforge.com/api/maven"
+    	name = "CurseForge"
+    	url = "https://minecraft.curseforge.com/api/maven"
     }
 }
 
@@ -38,16 +38,13 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation group: 'net.devtech', name: 'arrp', version: '0.2.6'
-	include group: 'net.devtech', name: 'arrp', version: '0.2.6'
+	modImplementation group: 'net.devtech', name: 'arrp', version: '0.4.3'
+	include group: 'net.devtech', name: 'arrp', version: '0.4.3'
 
-	modImplementation "io.github.cottonmc:LibGui:3.0.0+1.16.3"
-	include "io.github.cottonmc:LibGui:3.0.0+1.16.3"
+	modImplementation "io.github.cottonmc:LibGui:4.0.0-beta.3+1.17-pre1"
+	include "io.github.cottonmc:LibGui:4.0.0-beta.3+1.17-pre1"
 
-	modCompile "grondag:canvas-mc116:1.0.+"
-
-	//Required to make indigo work
-	include "grondag:jmx-mc116:1.19.+"
+	modCompileOnly("grondag:frex-mc117:5.2.223") { transitive = false }
 
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
@@ -56,13 +53,8 @@ dependencies {
 processResources {
 	inputs.property "version", project.version
 
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
+	filesMatching("fabric.mod.json") {
 		expand "version": project.version
-	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
 	}
 }
 

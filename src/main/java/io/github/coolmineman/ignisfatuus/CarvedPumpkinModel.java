@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 
 import com.mojang.datafixers.util.Pair;
 
-import grondag.canvas.apiimpl.Canvas;
+import grondag.frex.api.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
@@ -31,16 +31,18 @@ import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Matrix3f;
 import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.BlockRenderView;
 
 public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBakedModel {
+    private static final boolean canvas = RendererAccess.INSTANCE.getRenderer().getClass().getName().equals("grondag.canvas.apiimpl.Canvas");
+
     RenderMaterial canvasmaterial;
 
     @Override
@@ -57,10 +59,10 @@ public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBaked
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter,
             ModelBakeSettings rotationContainer, Identifier modelId) {
-        boolean canvas = RendererAccess.INSTANCE.getRenderer().getClass().getName().equals("grondag.canvas.apiimpl.Canvas");
+        
         if (canvas) {
-            Canvas canvas_instance = (Canvas) RendererAccess.INSTANCE.getRenderer();
-            canvasmaterial = canvas_instance.materialFinder().shader(new Identifier("canvas:shaders/material/default.vert"), new Identifier("ignis-fatuus:shaders/material/ultra_warm_glow.frag")).find();
+            Renderer canvasInstance = (Renderer) RendererAccess.INSTANCE.getRenderer();
+            canvasmaterial = canvasInstance.materialFinder().shader(new Identifier("canvas:shaders/material/default.vert"), new Identifier("ignis-fatuus:shaders/material/ultra_warm_glow.frag")).find();
         }
         return this;
     }
@@ -113,9 +115,7 @@ public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBaked
     }
 
     @Override
-    public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos,
-            Supplier<Random> randomSupplier, RenderContext context) {
-        BlockEntity entity = blockView.getBlockEntity(pos);
+    public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
         float rot = 0f;
         switch (state.get(HorizontalFacingBlock.FACING)) {
             case EAST:
@@ -135,9 +135,9 @@ public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBaked
             default:
                 break;
         }
-        Quaternion rotate = Vector3f.POSITIVE_Y.getDegreesQuaternion(rot);
+        Quaternion rotate = Vec3f.POSITIVE_Y.getDegreesQuaternion(rot);
         QuadTransform transform = mv -> {
-            Vector3f tmp = new Vector3f();
+            Vec3f tmp = new Vec3f();
 
             for (int i = 0; i < 4; i++) {
                 // Transform the position (center of rotation is 0.5, 0.5, 0.5)
@@ -172,7 +172,6 @@ public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBaked
         }
         context.popTransform();
 
-        boolean canvas = RendererAccess.INSTANCE.getRenderer().getClass().getName().equals("grondag.canvas.apiimpl.Canvas");
         if (canvas) {
             context.pushTransform(mv -> {
                 mv.material(canvasmaterial);
@@ -180,7 +179,7 @@ public class CarvedPumpkinModel implements UnbakedModel, BakedModel, FabricBaked
             });
         }
         context.pushTransform(mv -> {
-            Vector3f tmp = new Vector3f();
+            Vec3f tmp = new Vec3f();
             for (int i = 0; i < 4; i++) {
                 mv.copyPos(i, tmp);
                 tmp.add(-0.5f, -0.5f, -0.5f);

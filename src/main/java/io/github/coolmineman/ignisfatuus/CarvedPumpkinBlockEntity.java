@@ -7,25 +7,26 @@ import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.nbt.ByteTag;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtByte;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.util.math.BlockPos;
 
 public class CarvedPumpkinBlockEntity extends BlockEntity implements BlockEntityClientSerializable, RenderAttachmentBlockEntity {
     private boolean[][] carved_area = new boolean[12][12];
 
-    public CarvedPumpkinBlockEntity() {
-        super(Ignisfatuus.knifed_pumpkin_block_entity);
+    public CarvedPumpkinBlockEntity(BlockPos pos, BlockState state) {
+        super(Ignisfatuus.knifed_pumpkin_block_entity, pos, state);
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag tag) {
-        super.toTag(tag);
-        ListTag list = new ListTag();
+    public NbtCompound writeNbt(NbtCompound tag) {
+        super.writeNbt(tag);
+        NbtList list = new NbtList();
         for (int i = 0; i <= 11; i++) {
-            ListTag innerlist = new ListTag();
+            NbtList innerlist = new NbtList();
             for (int j = 0; j <= 11; j++) {
-                innerlist.add(ByteTag.of(carved_area[i][j]));
+                innerlist.add(NbtByte.of(carved_area[i][j]));
             }
             list.add(innerlist);
         }
@@ -34,15 +35,15 @@ public class CarvedPumpkinBlockEntity extends BlockEntity implements BlockEntity
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundTag tag) {
-        super.fromTag(state, tag);
+    public void readNbt(NbtCompound tag) {
+        super.readNbt(tag);
         if (tag.contains("carved_area")) {
             boolean[][] new_carved_area = new boolean[12][12];
-            ListTag carvedListTag = tag.getList("carved_area", 9);
+            NbtList carvedListTag = tag.getList("carved_area", 9);
             for (int i = 0; i <= 11; i++) {
-                ListTag carvedListTagInner = carvedListTag.getList(i);
+                NbtList carvedListTagInner = carvedListTag.getList(i);
                 for (int j = 0; j <= 11; j++) {
-                    new_carved_area[i][j] = ((ByteTag)carvedListTagInner.get(j)).getByte() == 1;
+                    new_carved_area[i][j] = ((NbtByte)carvedListTagInner.get(j)).byteValue() == 1;
                 }
             }
             carved_area = new_carved_area;
@@ -59,14 +60,14 @@ public class CarvedPumpkinBlockEntity extends BlockEntity implements BlockEntity
     }
 
     @Override
-    public void fromClientTag(CompoundTag tag) {
-        fromTag(null, tag);
+    public void fromClientTag(NbtCompound tag) {
+        readNbt(tag);
         MinecraftClient.getInstance().worldRenderer.scheduleBlockRenders(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override
-    public CompoundTag toClientTag(CompoundTag tag) {
-        return toTag(tag);
+    public NbtCompound toClientTag(NbtCompound tag) {
+        return writeNbt(tag);
     }
 
 	@Override
